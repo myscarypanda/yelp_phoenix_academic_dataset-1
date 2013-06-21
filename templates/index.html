@@ -1,0 +1,91 @@
+
+{% extends "header.html" %}
+{% block title %}Yelp Peronalized Recommendations{% endblock %}
+
+
+{% block content %}
+    <!-- Le styles -->
+        <style type="text/css">
+            body {
+                padding-top: 40px;
+                padding-bottom: 40px;
+                background-color: #f5f5f5;
+            }
+            
+            .form-signin {
+                max-width: 300px;
+                padding: 19px 29px 29px;
+                margin: 0 auto 20px;
+                background-color: rgb(200,5,2);
+                border: 1px solid #e5e5e5;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+                -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            }
+            .form-signin .form-signin-heading,
+            .form-signin .checkbox {
+                margin-bottom: 10px;
+            }
+            .form-signin input[type="text"],
+            .form-signin input[type="password"] {
+                font-size: 16px;
+                height: auto;
+                margin-bottom: 15px;
+                padding: 7px 9px;
+            }
+            
+            </style>
+            
+    <!-- Le styles -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            </style>
+
+    
+    <body>
+
+        
+        <div class="container">
+            
+            <!-- Main hero unit for a primary marketing message or call to action -->
+            <div class="hero-unit">
+                <h1><a href="http://www.yelp.com"><img src="../static/img/yelpLogoBigger.png" alt="YelpLogo"></a> <i>Personalized</i></h1>
+                <p>This application uses <a href="http://www.yelp.com/dataset_challenge">publically available data</a> from the Phoenix metropolitan area to help users discover new businesses. Your previous reviews are used to predict how you will rate other businesses. Businesses with the highest predicted rating are recommended.*</p>
+                                
+
+                <form class="form-signin" form name="input" action="{{ url_for('query') }}" method="post">
+                   
+                    <h2 class="form-signin-heading">Please sign in</h2>
+                    
+                    <input type="text" class="input-block-level" placeholder="User name" name = "user">
+                    <input type="password" class="input-block-level" placeholder="Password">
+                    <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+
+                </form>
+             
+                
+            <p><b>*Demo version</b> <br> 
+                Please enter one of these names: <b>Steve, Chris, Andrew, Robin, Cindy, Adrian. </b> <br>
+                Or leave blank to be a random user.</p>
+
+                
+            </div>
+{% endblock %}        
+
+            
+            <footer>
+                <p>&copy; Insight Data Science 2013</p>
+            </footer>
+            
+        </div> <!-- /container -->
+
+        
+    </body>
+</html>

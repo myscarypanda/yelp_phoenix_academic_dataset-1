@@ -1,0 +1,237 @@
+{% extends "header.html" %}
+{% block title %}Recommendations{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    
+    <!-- Main hero unit for a primary marketing message or call to action -->
+   <div class="page-header">
+       <h1><a href="http://www.yelp.com"> <img src="../static/img/yelpLogoBig.png" alt="YelpLogo"></a> <i>Personalized Recommendations for <FONT COLOR=red>{{user}}</font></i></h1>
+
+    </div>
+    
+    <!-- Example row of columns -->
+    <div class="row">
+    
+        <div class="span4">
+            <h3> Hello {{user}}! </h3>
+            <p class = "lead">
+            You have rated <b>{{numRevs}}</b> businesses: <br>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Business</th>
+                        <th>{{user}}'s Rating</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for review in rev %}
+                    <tr>
+                        <td><a href="http://www.yelp.com/search?find_desc={{review}}&find_loc=Phoenix%2C+AZ&ns=1"> {{review}} </a></td>
+                        <td><!--{{rev[review]}} -->
+                            {% if rev[review]==5 %}
+                                <img src="../static/img/FiveStar.png">
+                            {% elif rev[review]==4%}
+                                 <img src="../static/img/FourStar.png"> 
+                            {% elif rev[review]==3%}
+                                <img src="../static/img/ThreeStar.png">
+                            {% elif rev[review]==2%}
+                                <img src="../static/img/TwoStar.png">
+                            {% elif rev[review]==1%}
+                                <img src="../static/img/OneStar.png">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            </p>
+
+            <p><a class="btn" href="/">Log Out &raquo;</a></p>
+        </div>
+        
+        <div class="span2">
+        </div>
+        
+        <div class="span6">
+            <h3>Recommendations</h3>
+            <p class="lead">Here are {{n}} places we think you should check out!</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Business</th>
+                        <th>Avg Rating</th>
+                        <th>Best guess for {{user}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for r in rec %}
+                    <tr>
+                        <td><a href="http://www.yelp.com/search?find_desc={{r[1][0]}}&find_loc=Phoenix%2C+AZ&ns=1"> {{r[1][0]}} </a></td> 
+                            <td><!--{{r[1][1]}}-->
+                            {% if r[1][1]==5 %}
+                                <img src="../static/img/FiveStar.png">
+                            {% elif r[1][1]==4.5%}
+                                <img src="../static/img/FourHalfStar.png">
+                            {% elif r[1][1]==4%}
+                                <img src="../static/img/FourStar.png"> 
+                            {% elif r[1][1]==3.5%}
+                                <img src="../static/img/ThreeHalfStar.png">
+                            {% elif r[1][1]==3%}
+                                <img src="../static/img/ThreeStar.png">
+                            {% elif r[1][1]==2.5%}
+                                <img src="../static/img/TwoHalfStar.png">    
+                            {% elif r[1][1]==2%}
+                                <img src="../static/img/TwoStar.png">
+                            {% elif r[1][1]==1.5%}
+                                <img src="../static/img/OneHalfStar.png">
+                            {% elif r[1][1]==1%}
+                                <img src="../static/img/OneStar.png">
+                            {% endif %}
+                        </td>
+                        
+                        <td><center>
+                            {% if r[0]>4.75 and r[0]<=5.0 %}
+                                <img src="../static/img/FiveStar.png">
+                            {% elif r[0]>4.25 and r[0]<=4.75%}
+                                <img src="../static/img/FourHalfStar.png">
+                            {% elif r[0]>3.75 and r[0]<=4.25%}
+                                <img src="../static/img/FourStar.png"> 
+                            {% elif r[0]>3.25 and r[0]<=3.75%}
+                                <img src="../static/img/ThreeHalfStar.png">
+                            {% elif r[0]>2.75 and r[0]<=3.25%}
+                                <img src="../static/img/ThreeStar.png">
+                            {% elif r[0]>2.25 and r[0]<=2.75%}
+                                <img src="../static/img/TwoHalfStar.png">    
+                            {% elif r[0]>1.75 and r[0]<=2.25%}
+                                <img src="../static/img/TwoStar.png">
+                            {% elif r[0]>1.25 and r[0]<=1.75%}
+                                <img src="../static/img/OneHalfStar.png">
+                            {% elif r[0]<=1.25%}
+                                <img src="../static/img/OneStar.png">
+                            {% endif %}
+                                
+                             {{r[0]}}
+                                </center>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            
+            <p>
+            
+            
+            </p>
+                <br><br>
+                <p class= "lead">Here are {{n}} places we think you should stay away from!</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Business</th>
+                            <th>Avg Rating</th>
+                            <th>Best guess for {{user}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for r in nonrec %}
+                        <tr>
+                            <td><a href="http://www.yelp.com/search?find_desc={{r[1][0]}}&find_loc=Phoenix%2C+AZ&ns=1"> {{r[1][0]}} </a></td> 
+                            <td><!--{{r[1][1]}}-->
+                                {% if r[1][1]==5 %}
+                                <img src="../static/img/FiveStar.png">
+                                    {% elif r[1][1]==4.5%}
+                                    <img src="../static/img/FourHalfStar.png">
+                                        {% elif r[1][1]==4%}
+                                        <img src="../static/img/FourStar.png"> 
+                                            {% elif r[1][1]==3.5%}
+                                            <img src="../static/img/ThreeHalfStar.png">
+                                                {% elif r[1][1]==3%}
+                                                <img src="../static/img/ThreeStar.png">
+                                                    {% elif r[1][1]==2.5%}
+                                                    <img src="../static/img/TwoHalfStar.png">    
+                                                        {% elif r[1][1]==2%}
+                                                        <img src="../static/img/TwoStar.png">
+                                                            {% elif r[1][1]==1.5%}
+                                                            <img src="../static/img/OneHalfStar.png">
+                                                                {% elif r[1][1]==1%}
+                                                                <img src="../static/img/OneStar.png">
+                                                                    {% endif %}
+                                                                    </td>
+                            
+                            <td><center>
+                                {% if r[0]>4.75 and r[0]<=5.0 %}
+                                    <img src="../static/img/FiveStar.png">
+                                    {% elif r[0]>4.25 and r[0]<=4.75%}
+                                        <img src="../static/img/FourHalfStar.png">
+                                        {% elif r[0]>3.75 and r[0]<=4.25%}
+                                            <img src="../static/img/FourStar.png"> 
+                                            {% elif r[0]>3.25 and r[0]<=3.75%}
+                                                <img src="../static/img/ThreeHalfStar.png">
+                                                {% elif r[0]>2.75 and r[0]<=3.25%}
+                                                    <img src="../static/img/ThreeStar.png">
+                                                    {% elif r[0]>2.25 and r[0]<=2.75%}
+                                                        <img src="../static/img/TwoHalfStar.png">    
+                                                        {% elif r[0]>1.75 and r[0]<=2.25%}
+                                                            <img src="../static/img/TwoStar.png">
+                                                            {% elif r[0]>1.25 and r[0]<=1.75%}
+                                                                <img src="../static/img/OneHalfStar.png">
+                                                                {% elif r[0]<=1.25%}
+                                                                    <img src="../static/img/OneStar.png">
+                                                                    {% endif %}
+                                                                    
+                                                                    {{r[0]}}
+                                                                    </center>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+                
+                <p>
+                
+                
+                </p>
+                
+                
+                
+            <p><a class="btn" href="/algorithm">View details &raquo;</a></p>
+        </div>
+    </div>
+    
+    <hr>
+            
+    
+</div> <!-- /container -->
+{% endblock %}      
+
+
+
+        <!-- Le javascript
+         ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="../static/js/jquery.js"></script>
+        <script src="../static/js/bootstrap-transition.js"></script>
+        <script src="../static/js/bootstrap-alert.js"></script>
+        <script src="../static/js/bootstrap-modal.js"></script>
+        <script src="../static/js/bootstrap-dropdown.js"></script>
+        <script src="../static/js/bootstrap-scrollspy.js"></script>
+        <script src="../static/js/bootstrap-tab.js"></script>
+        <script src="../static/js/bootstrap-tooltip.js"></script>
+        <script src="../static/js/bootstrap-popover.js"></script>
+        <script src="../static/js/bootstrap-button.js"></script>
+        <script src="../static/js/bootstrap-collapse.js"></script>
+        <script src="../static/js/bootstrap-carousel.js"></script>
+        <script src="../static/js/bootstrap-typeahead.js"></script>
+        
+    </body>
+</html>
