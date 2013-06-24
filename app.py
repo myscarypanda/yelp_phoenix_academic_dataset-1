@@ -49,6 +49,8 @@ def recomm():
         user_id = sortedUsers[16778]
     elif user == 'Cindy':
         user_id = sortedUsers[10870]
+    elif user == 'Jeannie':
+        user_id = sortedUsers[7386]
     else:
         #user_id = sortedUsers[random.randrange(0, 27484)]
         number = random.randrange(0, 22982)
@@ -66,12 +68,12 @@ def recomm():
         rating = BusinessReviews[id][user_id]
         reviews[bus] = rating
 
-    #Get recommendations (top 5 and bottom 5)!
+    #Get recommendations (top 5 and bottom 5)
     rec = getRecom(UserReviews, matches, user_id, n=n)
 
 
     return render_template('recommend.html', user = user_name, avgRating = avg_rating, \
-                        numRevs = numReviews, rev = reviews, rec = rec[:n], nonrec = rec[-n:],  n = n)
+                        numRevs = numReviews, rev = reviews, rec = rec[:n], nonrec = rec[n:2*n], mostDev = rec[-n:], n = n)
 
 if __name__ == "__main__":
     app.run()

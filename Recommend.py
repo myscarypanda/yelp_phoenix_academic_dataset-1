@@ -19,6 +19,7 @@ from math import sqrt
 #INPUT: UReviews: UserReviews (dictionary of all the reviews users have made)
 #       matches: for each business, a list of similar businesses and their similarities
 #       user: user_id
+#OUTPUT: list of businesse
 
 def getRecom(UReviews, matches, user, n):
     
@@ -52,23 +53,30 @@ def getRecom(UReviews, matches, user, n):
                 busBaseline.setdefault(b2,0)
                 busBaseline[b2] = BusinessLookup[b2][2] - mu
                 
-     #find average predicted ratings  
-
+     #find average predicted ratings
+     #Store in a list: [(predictedRating, (Business name, avgRating)), ... ]
     predictedRatings = [((mu+userBaseline+busBaseline[b]) + 1.0*score/totalSim[b], BusinessLookup[b][1:]) \
                             if totalSim[b]>0 else (mu+userBaseline+busBaseline[b], BusinessLookup[b][1:]) for b, score in scores.items()]
     predictedRatings.sort()
     predictedRatings.reverse()
     
-    limit5Stars = [(5.0,bus) if stars>5 else (float('%.2f' %stars),bus) for (stars,bus) in predictedRatings]
-    predictedRatings = limit5Stars
-    print 'length'+str(len(predictedRatings))
-    print (predictedRatings[:n]+predictedRatings[-n:])
     
+    #limit ratings to be between 1 and 5
+    limit5Stars = [(5.0,bus) if stars>5 else (float('%.2f' %stars),bus) for (stars,bus) in predictedRatings]
+    limit5Stars = [(1.0,bus) if stars<1 else (float('%.2f' %stars),bus) for (stars,bus) in limit5Stars]
+
+    predictedRatings = limit5Stars
+
     if len(predictedRatings)<2*n:
         n=len(predictedRatings)/2
     
+        #sort in terms of greatest deviation
+    mostDev = [(entry, abs(entry[0]-entry[1][1])) for entry in predictedRatings]
+    mostDev.sort(key = lambda tup: tup[1])
+    mostDev.reverse()
     
-    return predictedRatings[:n]+predictedRatings[-n:]
+    #return businesses with top n predicted ratings, bottom n predicted ratings, and n greatest deviations between average and predicted
+    return predictedRatings[:n]+predictedRatings[-n:]+mostDev[:n]
     
 ##########################
 
