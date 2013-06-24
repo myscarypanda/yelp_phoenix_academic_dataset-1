@@ -150,6 +150,9 @@ for rev in allReviews:
         #this user has already been recorded in the lookup table
         row = UserLookup.get(user_id)[0]
         UserReviews[user_id][business_id] = star
+        
+#cleanup
+del allReviews
     
 
 for item in sims:
@@ -161,4 +164,5 @@ for item in sims:
     else:
         matches[b1] = [(sim, b2)]
 
-
+#cleanup
+del sims
