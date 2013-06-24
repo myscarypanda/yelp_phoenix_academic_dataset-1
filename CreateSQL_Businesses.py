@@ -43,8 +43,8 @@ with con:
         
         cur.execute('INSERT INTO Businesses(business_id, city, latitude, longitude, name, review_count, type, stars, category) \
                     VALUES("%s", "%s", "%f", "%f", "%s", "%d", "%s", "%f", "%s")' % \
-                    (str(bus[i]['business_id']), str(bus[i]['city']), \
+                    (bus[i]['business_id'].encode('ascii','ignore'), bus[i]['city'].encode('ascii','ignore'), \
                      bus[i]['latitude'], bus[i]['longitude'], bus[i]['name'].encode('ascii','ignore'), bus[i]['review_count'], \
-                     str(bus[i]['type']), bus[i]['stars'], cat))
+                     bus[i]['type'].encode('ascii','ignore'), bus[i]['stars'], cat))
                      
                      

@@ -33,5 +33,5 @@ with con:
         cur.execute('INSERT INTO Users(average_stars, \
                     name, review_count, type, user_id) \
                     VALUES("%f", "%s", "%d", "%s", "%s")' % \
-                    (users[i]['average_stars'], str(users[i]['name']), \
-                     users[i]['review_count'], str(users[i]['type']), str(users[i]['user_id'])))
+                    (users[i]['average_stars'], users[i]['name'].encode('ascii','ignore'), \
+                     users[i]['review_count'], users[i]['type'].encode('ascii','ignore'), users[i]['user_id'].encode('ascii','ignore')))

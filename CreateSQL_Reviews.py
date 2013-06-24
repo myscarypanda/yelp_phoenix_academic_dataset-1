@@ -35,9 +35,9 @@ with con:
         cur.execute('INSERT INTO Reviews(business_id, \
                     date, review_id, stars, type, user_id) \
                     VALUES("%s", "%s", "%s", "%d", "%s", "%s")' % \
-                    (str(reviews[i]['business_id']), str(reviews[i]['date']), \
-                    str(reviews[i]['review_id']), reviews[i]['stars'], \
-                    str(reviews[i]['type']), str(reviews[i]['user_id'])))
+                    (reviews[i]['business_id'].encode('ascii','ignore'), reviews[i]['date'].encode('ascii','ignore'), \
+                    reviews[i]['review_id'].encode('ascii','ignore'), reviews[i]['stars'], \
+                    reviews[i]['type'].encode('ascii','ignore'), reviews[i]['user_id'].encode('ascii','ignore')))
                     
                     
 cur.close()
