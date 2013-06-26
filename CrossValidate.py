@@ -106,7 +106,7 @@ def predictRating(user_id, business_id, BReviews):
     elif predictedRating < 1:
         predictedRating = 1
 
-    return predictedRating
+    return round(2.0*predictedRating)/2
     
     
 ####################
@@ -151,26 +151,28 @@ plt.rcParams.update(params)
 #plt.figure(figsize=(12,9))
 #plt.figure(figsize=(12, 18)) 
 plt.figure(figsize=(30, 10)) 
-#bins = np.linspace(-4, 4, 17)
-bins = np.linspace(0,4,9)
+bins = np.linspace(-4, 4, 18)
+#bins = np.linspace(0,4,9)
 
 plt.subplot(121)
-plt.hist([abs(i) for i in avgDeviations], bins, alpha=.9, color='crimson')
+#plt.hist([abs(i) for i in avgDeviations], bins, alpha=.9, color='crimson')
+plt.hist(avgDeviations, bins, alpha=.9, color='crimson')
 plt.title('Prediction = Business Average',fontsize = 24)
 plt.xlabel('Deviation from true rating')
 plt.ylabel('Frequency')
 #plt.ylim([0,1])
-plt.ylim([0,1400])
-plt.text(2,1100,'RMS error = 1.029',fontweight='bold',fontsize=26, color = 'crimson')
+plt.ylim([0,1200])
+plt.text(0.5,1000,'RMS error = 1.029',fontweight='bold',fontsize=26, color = 'crimson')
 
 plt.subplot(122)
-plt.hist([abs(i) for i in deviations], bins, alpha=.9, color='crimson')
+#plt.hist([abs(i) for i in deviations], bins, alpha=.9, color='crimson')
+plt.hist(deviations, bins, alpha=.9, color='crimson')
 plt.title('Prediction = CF + Baseline',fontsize = 24)
 plt.ylabel('Frequency')
 plt.xlabel('Deviation from true rating')
 #plt.ylim([0,1])
-plt.ylim([0,1400])
-plt.text(2,1100,'RMS error = 0.811',fontweight = 'bold',fontsize = 26,color = 'crimson')
+plt.ylim([0,1200])
+plt.text(0.5,1000,'RMS error = 0.811',fontweight = 'bold',fontsize = 26,color = 'crimson')
 
 #n,bins,patches = plt.hist([[abs(i) for i in avgDeviations], [abs(j) for j in deviations]],bins,normed=1,alpha=1,histtype='step')
 #
