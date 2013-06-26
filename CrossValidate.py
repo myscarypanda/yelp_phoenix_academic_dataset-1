@@ -156,7 +156,7 @@ bins = np.linspace(-4, 4, 18)
 
 plt.subplot(121)
 #plt.hist([abs(i) for i in avgDeviations], bins, alpha=.9, color='crimson')
-plt.hist(avgDeviations, bins, alpha=.9, color='crimson')
+plt.hist(avgDeviations, bins, alpha=.9, rwidth=0.6, color='crimson')
 plt.title('Prediction = Business Average',fontsize = 24)
 plt.xlabel('Deviation from true rating')
 plt.ylabel('Frequency')
@@ -166,7 +166,7 @@ plt.text(0.5,1000,'RMS error = 1.029',fontweight='bold',fontsize=26, color = 'cr
 
 plt.subplot(122)
 #plt.hist([abs(i) for i in deviations], bins, alpha=.9, color='crimson')
-plt.hist(deviations, bins, alpha=.9, color='crimson')
+plt.hist(deviations, bins, alpha=.9, rwidth=0.6, color='crimson')
 plt.title('Prediction = CF + Baseline',fontsize = 24)
 plt.ylabel('Frequency')
 plt.xlabel('Deviation from true rating')
