@@ -7,29 +7,39 @@
 
 <div class="container">
     <div class="page-header">
-        <h1><i>Recommendations using Collaborative Filtering</i></h1>
+        <h1><i>Recommendations using Collaborative Filtering</i></h1> 
+
     </div>
     
-
-    
     <p class = "lead">
-        Cross validation results on a hold out set of 2166 reviews (1.3% of total reviews)
+    Cross validation results on a hold out set of 2166 reviews (1.3% of total reviews)
     </p>
+
+    <h3> <center>Deviation of predictions from true ratings</center></h3><br>
+    <img src="../static/img/dev_subplot_h_pos1.png">
+        
+        <br><br><br><br><br><br>
     <div class = "row">
+ 
         <div class = "span5">
             <center><h4>Actual ratings across Holdout set</h4></center><br>
             <img src="../static/img/Ratings2.png" alt="RatingsHO"><br>
                 <br>
         </div>
-        
         <div class="span1">
-            </div>
+        </div>  
+        
+        <div class = "span6">
+            <center><h4>Deviations</h4></center><br>
+            <img src="../static/img/dev_subplot_v.png" alt="RatingsHO"><br>
+                <br>
+        </div>
 
-        <div class = "span5">
+<!--        <div class = "span6">
             <h4> <center>Deviation: Predicted Ratings - Actual Ratings</center></h4><br>
-            <img src="../static/img/Dev_BusinessAvg_Pearson1.png">
+            <img src="../static/img/dev_subplot_2.png">
             <br><br><br>
-             <img src="../static/img/Dev_CFBase_Pearson1.png">
+ -->
     </div>
     
 
