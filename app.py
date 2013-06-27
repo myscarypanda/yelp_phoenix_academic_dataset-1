@@ -13,6 +13,10 @@ app.secret_key = os.urandom(100)
 def hello():
     return render_template('index.html')
     
+@app.route('/slides')
+def slides():
+    return render_template('Slides.html')
+    
 @app.route('/algorithm')
 def algorithm():
     return render_template('algorithm.html', title = "About")
