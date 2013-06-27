@@ -80,4 +80,6 @@ def recomm():
                         numRevs = numReviews, rev = reviews, rec = rec[:n], nonrec = rec[n:2*n], mostDev = rec[-n:], n = n)
 
 if __name__ == "__main__":
+    app.run('0.0.0.0', port=80)
+    
     app.run()
