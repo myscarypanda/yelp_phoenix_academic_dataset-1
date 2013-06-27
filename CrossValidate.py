@@ -12,52 +12,20 @@ import numpy as np
 from math import sqrt
 from CrossValidation_set import *
 import matplotlib.pyplot as plt
+from CalcSimilarities import *
 
 
+#Using BReviews_HO, BusinessLookup, calculate the similarities of each pair of businesses
+#######################
+#
+#matches = {} #top matches for each business
+#
+#
+#for business in BusinessReviewsHO:
+    #scores = getTopMatches(BusinessReviewsHO, business, n=50)
+    #matches[business] = scores
 
-##############
-#Similarity measure: returns the similarity score between two businesses based on user reviews
-def calcSim(BReviews, b1, b2):
-    #Euclidean distance between b1 and b2
-    commonUsers = [] #users who went to both b1 and b2
-    
-    for user in BReviews[b1]:
-        if user in BReviews[b2]:
-            commonUsers.append(user)
-            
-    n = float(len(commonUsers))
-    #if no one went to both businesses, then return 0 (b1 and b2 are not similar at all)
-    if n == 0:
-        return 0
-        
-#========Euclidean distance======================================================================
-#     #calculate sum of squares of distances
-#     sumSqr = 0
-#     for user in commonUsers:
-#         dif = BReviews[b1][user] - BReviews[b2][user]
-#         sumSqr += pow(dif,2)
-#==============================================================================
-    
-    #calculate the pearson correlation coefficient
-    sum1 = sum([BReviews[b1][u] for u in commonUsers])
-    sum2 = sum([BReviews[b2][u] for u in commonUsers])
-    
-    sum1sq = sum([pow(BReviews[b1][u],2) for u in commonUsers])
-    sum2sq = sum([pow(BReviews[b2][u],2) for u in commonUsers])
-    
-    pSum = sum([BReviews[b1][u]*BReviews[b2][u] for u in commonUsers])
-    
-    num = pSum - (1.0*sum1*sum2/n)
-    den = sqrt((sum1sq - 1.0*pow(sum1,2)/n)*(sum2sq - 1.0*pow(sum2,2)/n))
-    if den==0:
-        return 0
-        
-    r = num/den
-    
-    #damp the pearson coefficient so that you need to have at least 10 common users
-    coef = r*min(1, 1.0*n/10)
-    return coef
-    
+#============================================================================#    
 #This function calculates the predicted rating User will give a Business
 #INPUT: user_id, business_id
 #OUTPUT: (double predictedRating) 
@@ -97,7 +65,6 @@ def predictRating(user_id, business_id, BReviews):
         predictedRating = (mu+businessBaseline+userBaseline)
 
     else:
-        #predictedRating = 1.0*score/totalSim
         predictedRating = (mu+userBaseline+businessBaseline)+1.0*score/totalSim
         #predictedRating = (mu+businessBaseline+userBaseline)       
         
@@ -142,43 +109,43 @@ for key in HoldOut.keys():
 rms = sqrt(sumOfSquares/len(HoldOut))
 print rms
 
-#plot histogram of the deviations
-params = {'legend.fontsize': 20,
-          'font.size' : 24,
+#################################
+##PLOT HISTOGRAMS OF PREDICTION ERRORS###
+params = {'legend.fontsize': 24,
+          'font.size' : 30,
           'axes.linewidth': 0.5,
           'legend.linewidth': 0.5}
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 plt.rcParams.update(params)
-#plt.figure(figsize=(12,9))
+#plt.figure(figsize=(14,10))
 #plt.figure(figsize=(12, 18)) 
 plt.figure(figsize=(30, 10)) 
 bins = np.linspace(-4, 4, 18)
-#bins = np.linspace(0,4,9)
 
 plt.subplot(121)
-#plt.hist([abs(i) for i in avgDeviations], bins, alpha=.9, color='crimson')
 plt.hist(avgDeviations, bins, alpha=.9, rwidth=0.6, color='crimson')
-plt.title('Prediction = Business Average',fontsize = 24)
-plt.xlabel('Deviation from true rating')
+#plt.title('Prediction = Business Average',fontsize = 24)
+plt.xlabel('\nDeviation from true rating')
 plt.ylabel('Frequency')
-#plt.ylim([0,1])
 plt.ylim([0,1200])
-plt.text(0.5,1000,'RMS error = 1.029',fontweight='bold',fontsize=26, color = 'crimson')
+plt.text(-0.5,1000,'RMS error = 1.03',fontweight='bold',color = 'red',fontsize=35,bbox=props)
 
 plt.subplot(122)
-#plt.hist([abs(i) for i in deviations], bins, alpha=.9, color='crimson')
 plt.hist(deviations, bins, alpha=.9, rwidth=0.6, color='crimson')
-plt.title('Prediction = CF + Baseline',fontsize = 24)
+#plt.title('Prediction = CF + Baseline',fontsize = 24)
 plt.ylabel('Frequency')
-plt.xlabel('Deviation from true rating')
+plt.xlabel('\nDeviation from true rating')
 #plt.ylim([0,1])
 plt.ylim([0,1200])
-plt.text(0.5,1000,'RMS error = 0.811',fontweight = 'bold',fontsize = 26,color = 'crimson')
+plt.text(-0.5,1000,'RMS error = 0.81',fontweight = 'bold',fontsize = 35,color = 'red', bbox = props)
 
-#n,bins,patches = plt.hist([[abs(i) for i in avgDeviations], [abs(j) for j in deviations]],bins,normed=1,alpha=1,histtype='step')
+#plt.hist(deviations, bins, alpha = 0.4, color = 'b', rwidth = 0.6)
+#plt.hist(avgDeviations, bins, alpha=0.1, color='k', rwidth = 0.6)
 #
-#plt.xlabel('Deviation from true rating', fontsize = 18)
-#plt.ylabel('Frequency',fontsize=18)
-#plt.title('Error: Prediction - True Rating',fontsize=24)
-#plt.legend(["Prediction = Business Average \nRMS error = 1.029 \n\n", \
-    #"Prediction = CF + Baseline \nRMS error = 0.811"], loc=1)
+#plt.xlabel('\nDeviation from true rating')
+#plt.ylabel('Frequency')
+#plt.legend(["Naive Prediction: Business Average \nRMS error = 1.03 \n", \
+    #"Collaborative Filter Prediction \nRMS error = 0.81"], loc=2, frameon = 0)
+#plt.ylim([0,1300])
+
 plt.show()

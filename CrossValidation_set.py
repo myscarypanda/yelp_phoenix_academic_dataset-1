@@ -21,6 +21,9 @@ from Recommend import *
 #Create the holdout set by randomly selecting a review made by a user who has a lot of reviews (>15)
 #Remove this review from BusinessReviews.
 #Choosing only users >15 reviews gives hold out set of 2166 reviews (1.3%)
+
+#Make new dictionary of reviews that businesses have, so that the hold out set is removed.
+#--- BReviews_HO
 HoldOut = {}
 BReviews_HO = copy.deepcopy(BusinessReviews)
 deviations_CF = []

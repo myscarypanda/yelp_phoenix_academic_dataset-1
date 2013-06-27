@@ -1,67 +1,12 @@
-# Imports data from MySQL into dataframe.
-# Then go line by line and populate utility matrix
-
+# -*- coding: utf-8 -*-
 """
-Created on Tue Jun 11 15:10:21 2013
+Created on Wed Jun 26 16:05:48 2013
 
 @author: lisaqian
 """
+
 import MySQLdb as db
 from math import sqrt
-
-
-#############################
-#Business comparison dataset: Find the top n most similar businesses for each business
-#INPUT: BReviews: BusinessReviews - dictionary of each business and the reviews it got
-#OUTPUT: matches: dectionary of each business and its most similar businesses
-def calcSimilarBusinesses(BReviews, n = 50):
-    
-    #Dictionary of businesses, where value is a list of top n businesses most similar to each b
-    #each entry of list is a tuple: (score, business_id)
-    matches = {}
-
-    for business in BReviews:
-        scores = getTopMatches(BReviews, business, n=n)
-        matches[business] = scores
-    
-    return matches
-
-#############################
-
-
-############################
-#Gets a recommendation for a user
-#INPUT: UReviews: UserReviews (dictionary of all the reviews users have made)
-#       matches: for each business, a list of similar businesses and their similarities
-#       user: user_id
-
-def getRecom(UReviews, matches, user, n = 10):
-    userRatings = UReviews[user] #these are all the ratings that user has reviewed
-    predictedRatings = {} #dictionary of predicted ratings and corresponding business 
-    totalSim = {}
-    
-    #iterate over items rated by the user
-    for (business, rating) in userRatings.items():
-        
-        #now iterate over similar businesses
-        for (sim, b2) in matches[business]:
-            
-            if b2 not in userRatings:
-                #predictedRatings[b2] = sim*5
-                predictedRatings.setdefault(b2,0)
-                predictedRatings[b2] += sim*rating
-                
-                #sum of all the similarities
-                totalSim.setdefault(b2,0)
-                totalSim[b2]+=sim
-                
-      #find average ranking      
-    rankings = [(score/totalSim[item], BusinessLookup[item][1:]) for item,score in predictedRatings.items()]
-    rankings.sort()
-    rankings.reverse()
-    return rankings[0:n]
-    
-##########################
 
 
 ############
@@ -118,78 +63,3 @@ def calcSim(BReviews, b1, b2):
     #damp the pearson coefficient so that you need to have at least 10 common users
     coef = r*min(1, 1.0*n/10)
     return coef
-
-
-
-#######################
-##Main function
-con = db.connect(host = "localhost", user = "Lisa", passwd = 'lisa', db ="Yelp", port = 3306)
-with con:
-    
-    cur = con.cursor()
-    #cur.execute('select * from JoinedReviews')
-    cur.execute('select * from JoinedReviews_Small')
-    allReviews = cur.fetchall() #these are all the reviews from JoinedReviews, as tuples
-    
-#Now iterate through tuples and populate the following data structures:
-#   BusinessLookup -- {business_id: [pos, name, avg_stars]}
-#   UserLookup -- {user_id: [pos, name, avg_stars]}
-#       pos = location in the Utility matrix.
-
-BusinessLookup = {} #Lookup table for business_id -> business name
-UserLookup = {} #Lookup table for user_id -> user name
-UserReviews = {} #Reviews each user made
-BusinessReviews = {} #Reviews for each business
-matches = {} #top matches for each business
-
-
-#indices for row (business) and column (user)
-bi = 0
-ui = 0
-
-for rev in allReviews:
-    star = int(rev[1]) 
-    business_id = rev[2]
-    user_id = rev[6]
-    
-    BusinessReviews.setdefault(business_id,{})
-    UserReviews.setdefault(user_id,{})
-    BusinessReviews[business_id][user_id] = star
-    UserReviews[user_id][business_id] = star
-    
-    #Determine where in the utility matrix the rating should go:
-    if business_id not in BusinessLookup: 
-        #this business is not yet in our dictionary
-        column = bi
-        #place this business into the business lookup table
-        BusinessLookup[business_id] = [column, rev[3], rev[4]]
-        
-        bi += 1 #increment the index for last business recorded
-
-    if user_id not in UserLookup:
-        row = ui
-        #place this user into the user lookup table
-        UserLookup[user_id] = [row, rev[7], rev[8]]
-        ui+=1
-
-for business in BusinessReviews:
-    scores = getTopMatches(BusinessReviews, business, n=50)
-    matches[business] = scores
-
-
-with con:
-#Put these similarities back into the database in a table called similarities
-    cur = con.cursor()
-    cur.execute("DROP TABLE IF EXISTS Similarities")
-    cur.execute("CREATE TABLE Similarities(\
-                num INT NOT NULL auto_increment, \
-                b1_id varchar(255) NOT NULL, \
-                b2_id varchar(255) NOT NULL, \
-                sim FLOAT NOT NULL, \
-                PRIMARY KEY(num)) ENGINE = InnoDB;")
-                
-    for b1 in matches: 
-        for (sim, b2) in matches[b1]:
-            
-            cur.execute('INSERT INTO Similarities(b1_id, b2_id, sim) \
-                        VALUES("%s", "%s", "%f")' % (b1, b2, sim))
