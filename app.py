@@ -21,9 +21,9 @@ def slides():
 def algorithm():
     return render_template('algorithm.html', title = "About")
 
-@app.route('/Cross')
+@app.route('/validation')
 def Cross():
-    return render_template('Cross.html')
+    return render_template('validation.html')
 
 @app.route("/query.html", methods = ['POST'])
 def query():
