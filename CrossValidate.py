@@ -86,6 +86,7 @@ deviations = []
 ratings = []
 predictions = []
 sumOfSquares = 0
+sumOfSquaresBA = 0
 avgDeviations = []
 
 #FOLLOWING DATA STRUCTURES FROM CrossValidation_set
@@ -102,12 +103,17 @@ for key in HoldOut.keys():
     deviations.append(error)
     avgDeviations.append(businessAvg - HoldOut[key]) #deviation if prediction is bus average
     sumOfSquares += pow(error,2)
+    sumOfSquaresBA += pow(businessAvg - HoldOut[key], 2)
     ratings.append(HoldOut[key])
     predictions.append(pred)
     
-#rms error
+#rms error for CF
 rms = sqrt(sumOfSquares/len(HoldOut))
 print rms
+
+#rms error for BA
+rms_BA = sqrt(sumOfSquaresBA/len(HoldOut))
+print rms_BA
 
 #################################
 ##PLOT HISTOGRAMS OF PREDICTION ERRORS###
@@ -124,20 +130,20 @@ bins = np.linspace(-4, 4, 18)
 
 plt.subplot(121)
 plt.hist(avgDeviations, bins, alpha=.9, rwidth=0.6, color='crimson')
-#plt.title('Prediction = Business Average',fontsize = 24)
+plt.title('Prediction = Business Average')
 plt.xlabel('\nDeviation from true rating')
 plt.ylabel('Frequency')
-plt.ylim([0,1200])
-plt.text(-0.5,1000,'RMS error = 1.03',fontweight='bold',color = 'red',fontsize=35,bbox=props)
+plt.ylim([0,1800])
+plt.text(-0.5,1600,'RMS error = 1.08',fontweight='bold',color = 'red',fontsize=35,bbox=props)
 
 plt.subplot(122)
 plt.hist(deviations, bins, alpha=.9, rwidth=0.6, color='crimson')
-#plt.title('Prediction = CF + Baseline',fontsize = 24)
+plt.title('Prediction = Baseline + CF')
 plt.ylabel('Frequency')
 plt.xlabel('\nDeviation from true rating')
 #plt.ylim([0,1])
-plt.ylim([0,1200])
-plt.text(-0.5,1000,'RMS error = 0.81',fontweight = 'bold',fontsize = 35,color = 'red', bbox = props)
+plt.ylim([0,1800])
+plt.text(-0.5,1600,'RMS error = 0.47',fontweight = 'bold',fontsize = 35,color = 'red', bbox = props)
 
 #plt.hist(deviations, bins, alpha = 0.4, color = 'b', rwidth = 0.6)
 #plt.hist(avgDeviations, bins, alpha=0.1, color='k', rwidth = 0.6)

@@ -32,19 +32,41 @@ ratings = []
 predictions = []
 sumOfSquares = 0
 
+topUsers = 0
 
-for user in UserReviews:
 
-    #hold out a review from the most prolific reviewers so as to not disturb the utility matrix too much
-    if len(UserReviews[user]) > 15:
+if topUsers:
+     #hold out a review from the most prolific reviewers so as to not disturb the utility matrix too much
+   
+   for user in UserReviews:
         
-        #take a random review and put in hold out set.
-        business = rd.choice(UserReviews[user].keys())
-        
-        #check if we have already included this rating in the hold out set
-        if (user,business) not in HoldOut:
-            rating = UserReviews[user][business]
-            HoldOut[(user,business)] = rating
+        if len(UserReviews[user]) > 15:
             
-            #remove this rating from BReviews_HO
-            del BReviews_HO[business][user]
+            #take a random review and put in hold out set.
+            business = rd.choice(UserReviews[user].keys())
+            
+            #check if we have already included this rating in the hold out set
+            if (user,business) not in HoldOut:
+                rating = UserReviews[user][business]
+                HoldOut[(user,business)] = rating
+                
+                #remove this rating from BReviews_HO
+                del BReviews_HO[business][user]
+                
+
+else:
+    #take random sampling of 2166 reviews as the hold out set
+    nRevs = 0
+    while nRevs<2166:
+        
+        randUser = rd.choice(UserReviews.keys())
+        if len(UserReviews[randUser])>1:
+            randBus = rd.choice(UserReviews[randUser].keys())
+            
+            if (randUser,randBus) not in HoldOut:
+                rating = UserReviews[randUser][randBus]
+                HoldOut[(randUser, randBus)] = rating
+                
+                del BReviews_HO[randBus][randUser]
+                
+                nRevs += 1
