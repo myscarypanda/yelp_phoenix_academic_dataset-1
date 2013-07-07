@@ -8,92 +8,20 @@ Created on Tue Jun 11 15:10:21 2013
 """
 import MySQLdb as db
 from math import sqrt
+from CalcSimilarities import *
 
 
-#############################
-#Business comparison dataset: Find the top n most similar businesses for each business
-#INPUT: BReviews: BusinessReviews - dictionary of each business and the reviews it got
-#OUTPUT: matches: dectionary of each business and its most similar businesses
-def calcSimilarBusinesses(BReviews, n = 50):
-    
-    #Dictionary of businesses, where value is a list of top n businesses most similar to each b
-    #each entry of list is a tuple: (score, business_id)
-    matches = {}
-
-    for business in BReviews:
-        scores = getTopMatches(BReviews, business, n=n)
-        matches[business] = scores
-    
-    return matches
-
-#############################
-
-
-############
-#Return a list of most similar businesses for a given business (include a similarity measure)
-#Each item in list is a tuple: (sim, bus_id)
-def getTopMatches(BReviews, bus, n):
-    #start with just random numbers
-    scores = [(calcSim(BReviews, bus, other), other) for other in BReviews if other!=bus]
-    scores.sort()
-    scores.reverse()
-    return scores[0:n]
-    
-############
-
-##############
-#Similarity measure: returns the similarity score between two businesses based on user reviews
-def calcSim(BReviews, b1, b2):
-    #Euclidean distance between b1 and b2
-    commonUsers = [] #users who went to both b1 and b2
-    
-    for user in BReviews[b1]:
-        if user in BReviews[b2]:
-            commonUsers.append(user)
-            
-    n = float(len(commonUsers))
-    #if no one went to both businesses, then return 0 (b1 and b2 are not similar at all)
-    if n == 0:
-        return 0
-        
-#========Euclidean distance======================================================================
-#     #calculate sum of squares of distances
-#     sumSqr = 0
-#     for user in commonUsers:
-#         dif = BReviews[b1][user] - BReviews[b2][user]
-#         sumSqr += pow(dif,2)
-#==============================================================================
-    
-    #calculate the pearson correlation coefficient
-    sum1 = sum([BReviews[b1][u] for u in commonUsers])
-    sum2 = sum([BReviews[b2][u] for u in commonUsers])
-    
-    sum1sq = sum([pow(BReviews[b1][u],2) for u in commonUsers])
-    sum2sq = sum([pow(BReviews[b2][u],2) for u in commonUsers])
-    
-    pSum = sum([BReviews[b1][u]*BReviews[b2][u] for u in commonUsers])
-    
-    num = pSum - (1.0*sum1*sum2/n)
-    den = sqrt((sum1sq - 1.0*pow(sum1,2)/n)*(sum2sq - 1.0*pow(sum2,2)/n))
-    if den==0:
-        return 0
-        
-    r = num/den
-    
-    #damp the pearson coefficient so that you need to have at least 10 common users
-    coef = r*min(1, 1.0*n/10)
-    return coef
 
 
 
 #######################
 ##Main function
-con = db.connect(host = "localhost", user = "Lisa", passwd = 'lisa', db ="Yelp", port = 3306)
+con = db.connect(host = "localhost", user = "Lisa", passwd = 'lisa', db ="yelp", port = 3306)
 with con:
     
     cur = con.cursor()
     #cur.execute('select * from JoinedReviews')
-    cur.execute('select * from JoinedReviews_Small')
+    cur.execute('select * from JoinedReviews_Two') #Reviews that come from Reviewers > 1 review, and from businesses > 7 ratings
     allReviews = cur.fetchall() #these are all the reviews from JoinedReviews, as tuples
     
 #Now iterate through tuples and populate the following data structures:
@@ -145,8 +73,8 @@ for business in BusinessReviews:
 with con:
 #Put these similarities back into the database in a table called similarities
     cur = con.cursor()
-    cur.execute("DROP TABLE IF EXISTS Similarities")
-    cur.execute("CREATE TABLE Similarities(\
+    cur.execute("DROP TABLE IF EXISTS Similarities_Two")
+    cur.execute("CREATE TABLE Similarities_Two(\
                 num INT NOT NULL auto_increment, \
                 b1_id varchar(255) NOT NULL, \
                 b2_id varchar(255) NOT NULL, \
@@ -156,5 +84,5 @@ with con:
     for b1 in matches: 
         for (sim, b2) in matches[b1]:
             
-            cur.execute('INSERT INTO Similarities(b1_id, b2_id, sim) \
+            cur.execute('INSERT INTO Similarities_Two(b1_id, b2_id, sim) \
                         VALUES("%s", "%s", "%f")' % (b1, b2, sim))

@@ -40,7 +40,7 @@ if topUsers:
    
    for user in UserReviews:
         
-        if len(UserReviews[user]) > 15:
+        if len(UserReviews[user]) > 17:
             
             #take a random review and put in hold out set.
             business = rd.choice(UserReviews[user].keys())
@@ -52,12 +52,13 @@ if topUsers:
                 
                 #remove this rating from BReviews_HO
                 del BReviews_HO[business][user]
-                
+    
+   print len(HoldOut)
 
 else:
     #take random sampling of 2166 reviews as the hold out set
     nRevs = 0
-    while nRevs<2166:
+    while nRevs<1864:
         
         randUser = rd.choice(UserReviews.keys())
         if len(UserReviews[randUser])>1:

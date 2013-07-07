@@ -93,12 +93,11 @@ con = db.connect(host = "localhost", user = "Lisa", passwd = 'lisa', db ="Yelp",
 with con:
     
     cur = con.cursor()
-    #cur.execute('select * from JoinedReviews')
-    cur.execute('select * from JoinedReviews_Small')
-    allReviews = cur.fetchall() #these are all the reviews from JoinedReviews, as tuples
+    cur.execute('select * from JoinedReviews_Two')
+    allReviews = cur.fetchall() #these are all the reviews from JoinedReviews_Two, as tuples
     
     #retrieve the similarities
-    cur.execute('select * from Similarities order by b1_id')
+    cur.execute('select * from Similarities_Two order by b1_id')
     sims = cur.fetchall()
     
 #Now iterate through tuples and populate the following data structures:

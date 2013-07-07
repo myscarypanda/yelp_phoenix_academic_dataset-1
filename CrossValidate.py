@@ -123,8 +123,6 @@ params = {'legend.fontsize': 24,
           'legend.linewidth': 0.5}
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 plt.rcParams.update(params)
-#plt.figure(figsize=(14,10))
-#plt.figure(figsize=(12, 18)) 
 plt.figure(figsize=(30, 10)) 
 bins = np.linspace(-4, 4, 18)
 
@@ -134,14 +132,13 @@ plt.title('Prediction = Business Average')
 plt.xlabel('\nDeviation from true rating')
 plt.ylabel('Frequency')
 plt.ylim([0,1800])
-plt.text(-0.5,1600,'RMS error = 1.08',fontweight='bold',color = 'red',fontsize=35,bbox=props)
+plt.text(-0.5,1600,'RMS error = 1.15',fontweight='bold',color = 'red',fontsize=35,bbox=props)
 
 plt.subplot(122)
 plt.hist(deviations, bins, alpha=.9, rwidth=0.6, color='crimson')
 plt.title('Prediction = Baseline + CF')
 plt.ylabel('Frequency')
 plt.xlabel('\nDeviation from true rating')
-#plt.ylim([0,1])
 plt.ylim([0,1800])
 plt.text(-0.5,1600,'RMS error = 0.47',fontweight = 'bold',fontsize = 35,color = 'red', bbox = props)
 

@@ -39,25 +39,26 @@ def recomm():
     user = session['user']
     user_name = user
     
-    if user == 'Andrew':
-        user_id = sortedUsers[15241]
-    elif user == 'Chris':
-        user_id = sortedUsers[7285]
-    elif user == 'Paul':
-        user_id = sortedUsers[7773]
+    if user == 'Jared':
+        user_id = sortedUsers[1672]
+    elif user == 'Jeffrey':
+        user_id = sortedUsers[6875]
+    elif user == 'Cassie':
+        user_id = sortedUsers[18143]
     elif user == 'Steve':
-        user_id = sortedUsers[14500]
-    elif user == 'Robin':
-        user_id = sortedUsers[10815]
-    elif user == 'Adrian':
-        user_id = sortedUsers[16778]
-    elif user == 'Cindy':
-        user_id = sortedUsers[10870]
-    elif user == 'Jeannie':
-        user_id = sortedUsers[7386]
+       user_id = sortedUsers[13616]
+    elif user == 'Lorelai':
+        user_id = sortedUsers[1019]
+    elif user == 'Jessica':
+        user_id = sortedUsers[9437]
+    elif user == 'Michael':
+        user_id = sortedUsers[17007]
+    elif user == 'Jay':
+        user_id = sortedUsers[4295]
     else:
-        #user_id = sortedUsers[random.randrange(0, 27484)]
-        number = random.randrange(0, 22982)
+
+        #number = random.randrange(0, 22982) - from JoinedReviews_Small
+        number = random.randrange(0, 21572)
         user_id = sortedUsers[number]
         user_name = UserLookup[user_id][1]
         

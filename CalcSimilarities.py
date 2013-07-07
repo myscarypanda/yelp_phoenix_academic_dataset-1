@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# Just some functions for calculation similarities. Doesn't make the whole similarity matrix.
 """
 Created on Wed Jun 26 16:05:48 2013
 
@@ -60,6 +60,6 @@ def calcSim(BReviews, b1, b2):
         
     r = num/den
     
-    #damp the pearson coefficient so that you need to have at least 10 common users
-    coef = r*min(1, 1.0*n/10)
+    #damp the pearson coefficient so that you need to have at least 8 common users
+    coef = r*min(1, 1.0*n/8)
     return coef
